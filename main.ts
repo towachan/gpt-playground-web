@@ -9,5 +9,9 @@ import manifest from "./fresh.gen.ts";
 
 import twindPlugin from "$fresh/plugins/twind.ts";
 import twindConfig from "./twind.config.ts";
+import { config } from "https://deno.land/x/dotenv@v3.2.2/mod.ts";
 
-await start(manifest, { plugins: [twindPlugin(twindConfig)] });
+await start(manifest, {
+  port: config()["PORT"],
+  plugins: [twindPlugin(twindConfig)],
+});
