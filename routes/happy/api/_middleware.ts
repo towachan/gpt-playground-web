@@ -11,7 +11,6 @@ export async function handler(
   ctx: MiddlewareHandlerContext<State>,
 ) {
   const cookie = getCookies(req.headers);
-  console.log(cookie);
   const { session } = cookie;
 
   if (session === null || (session !== null && !validate(session))) {

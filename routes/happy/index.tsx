@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>GRT playground</title>
+        <title>GPT playground</title>
       </Head>
       <div class="mx-auto max-w-screen-md">
         <Chat />
