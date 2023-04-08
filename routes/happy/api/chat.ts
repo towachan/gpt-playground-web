@@ -1,5 +1,5 @@
 import { HandlerContext } from "$fresh/server.ts";
-import { chatCompletiions, Message } from "../../services/openaiService.ts";
+import { chatCompletiions, Message } from "../../../services/openaiService.ts";
 
 interface ChatBody {
   messages: Message[];

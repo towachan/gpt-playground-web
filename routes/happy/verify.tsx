@@ -1,6 +1,6 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { Button } from "../components/Button.tsx";
-import Input from "../components/Input.tsx";
+import { Button } from "../../components/Button.tsx";
+import Input from "../../components/Input.tsx";
 import { config } from "https://deno.land/x/dotenv@v3.2.2/mod.ts";
 import { setCookie } from "https://deno.land/std@0.182.0/http/cookie.ts";
 import { v5 } from "https://deno.land/std@0.182.0/uuid/mod.ts";
@@ -30,7 +30,7 @@ export const handler: Handlers<Data> = {
       try {
         console.log(`name = ${name}`);
         const url = new URL(req.url);
-        url.pathname = "/api/auth";
+        url.pathname = "/happy/api/auth";
         resp = await fetch(url, {
           method: "POST",
           body: JSON.stringify({ name }),
@@ -58,11 +58,11 @@ export const handler: Handlers<Data> = {
           maxAge: 3600,
           sameSite: "Lax",
           domain: url.hostname,
-          path: "/",
+          path: "/happy",
           secure: true,
         });
 
-        headers.set("location", "/");
+        headers.set("location", "/happy");
         return new Response(null, {
           status: 303,
           headers,

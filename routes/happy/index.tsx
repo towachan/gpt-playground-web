@@ -1,5 +1,5 @@
 import { Head } from "$fresh/runtime.ts";
-import Chat from "../islands/Chat.tsx";
+import Chat from "../../islands/Chat.tsx";
 
 export default function Home() {
   return (

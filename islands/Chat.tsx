@@ -27,7 +27,7 @@ export default function Chat() {
     setMessages(newMessages);
     setInput("");
 
-    const resp = await fetch("/api/chat", {
+    const resp = await fetch("/happy/api/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +37,7 @@ export default function Chat() {
     setTyping(false);
 
     if (resp.status === 401) {
-      window.location.pathname = "/verify";
+      window.location.pathname = "/happy/verify";
     } else {
       const { result, message, error } = await resp.json();
       if (result && message) {
