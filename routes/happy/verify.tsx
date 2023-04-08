@@ -15,6 +15,7 @@ interface Result {
 }
 
 const namespace: string = config()["NAME_SPACE"];
+const users: string[] = config()["USERS"].split(",");
 
 export const handler: Handlers<Data> = {
   GET(_, ctx) {
@@ -26,18 +27,31 @@ export const handler: Handlers<Data> = {
     const name = formData.get("name");
 
     if (name !== "") {
-      let resp;
       try {
-        console.log(`name = ${name}`);
-        const url = new URL(req.url);
-        url.pathname = "/happy/api/auth";
-        resp = await fetch(url, {
-          method: "POST",
-          body: JSON.stringify({ name }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        if (users.includes(`${name}`)) {
+          const url = new URL(req.url);
+          const headers = new Headers();
+          setCookie(headers, {
+            name: "session",
+            value: await v5.generate(
+              namespace,
+              new TextEncoder().encode(name?.toString()),
+            ),
+            maxAge: 3600,
+            sameSite: "Lax",
+            domain: url.hostname,
+            path: "/happy",
+            secure: true,
+          });
+
+          headers.set("location", "/happy");
+          return new Response(null, {
+            status: 303,
+            headers,
+          });
+        } else {
+          return ctx.render({ name: "", error: "User name is not good." });
+        }
       } catch (e) {
         console.error("fail to auth - ", e);
         return ctx.render({
@@ -45,30 +59,6 @@ export const handler: Handlers<Data> = {
           error: "Fail to check name.",
         });
       }
-
-      if (resp.status === 200) {
-        const url = new URL(req.url);
-        const headers = new Headers();
-        setCookie(headers, {
-          name: "session",
-          value: await v5.generate(
-            namespace,
-            new TextEncoder().encode(name?.toString()),
-          ),
-          maxAge: 3600,
-          sameSite: "Lax",
-          domain: url.hostname,
-          path: "/happy",
-          secure: true,
-        });
-
-        headers.set("location", "/happy");
-        return new Response(null, {
-          status: 303,
-          headers,
-        });
-      }
-      return ctx.render({ name: "", error: "User name is not good." });
     }
     return ctx.render({ name: "", error: "" });
   },
